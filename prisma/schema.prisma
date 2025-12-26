@@ -1,0 +1,149 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model mst_diagnosis_type {
+  DiagnosisTypeID        Int      @id @default(autoincrement())
+  DiagnosisTypeName      String   @db.VarChar(250)
+  DiagnosisTypeShortName String?  @db.VarChar(50)
+  IsActive               Boolean  @db.Bit(1)
+  HospitalID             Int
+  Description            String?  @db.VarChar(250)
+  UserID                 Int
+  Created                DateTime @db.DateTime(0)
+  Modified               DateTime @db.DateTime(0)
+}
+
+model mst_doctor {
+  DoctorID    Int      @id @default(autoincrement())
+  DoctorName  String   @db.VarChar(250)
+  StaffID     Int?
+  StudentID   Int?
+  HospitalID  Int
+  Description String?  @db.VarChar(250)
+  UserID      Int
+  Created     DateTime @db.DateTime(0)
+  Modified    DateTime @db.DateTime(0)
+}
+
+model mst_hospital {
+  HospitalID                   Int      @id @default(autoincrement())
+  HospitalName                 String   @db.VarChar(250)
+  DefaultPaymentModeID         Int?
+  RegistrationCharge           Decimal? @db.Decimal(10, 2)
+  RegistrationValidityMonths   Int?
+  OpeningDate                  DateTime @db.Date
+  OpeningPatientNo             Int
+  OpeningOPDNo                 Int
+  OpeningReceiptNo             Int
+  Description                  String?  @db.VarChar(250)
+  UserID                       Int
+  Created                      DateTime @db.DateTime(0)
+  Modified                     DateTime @db.DateTime(0)
+  Address                      String?  @db.VarChar(500)
+  IsRateEnableInReceipt        Boolean? @db.Bit(1)
+  IsRegistrationFeeEnableInOPD Boolean? @db.Bit(1)
+}
+
+model mst_opd {
+  OPDID             Int      @id @default(autoincrement())
+  OPDNo             String?  @db.VarChar(250)
+  OPDDateTime       DateTime @db.DateTime(0)
+  PatientID         Int
+  IsFollowUpCase    Boolean  @db.Bit(1)
+  TreatedByDoctorID Int
+  RegistrationFee   Decimal  @db.Decimal(10, 2)
+  Description       String?  @db.VarChar(250)
+  UserID            Int
+  Created           DateTime @db.DateTime(0)
+  Modified          DateTime @db.DateTime(0)
+  OLDOPDNo          String?  @db.VarChar(250)
+}
+
+model mst_opd_diagnosis_type {
+  OPDDiagnosisTypeID Int      @id @default(autoincrement())
+  OPDID              Int
+  DiagnosisTypeID    Int
+  Description        String?  @db.VarChar(250)
+  UserID             Int
+  Created            DateTime @db.DateTime(0)
+  Modified           DateTime @db.DateTime(0)
+}
+
+model mst_patient {
+  PatientID            Int      @id @default(autoincrement())
+  PatientName          String   @db.VarChar(250)
+  PatientNo            Int
+  RegistrationDateTime DateTime @db.DateTime(0)
+  Age                  Int?
+  BloodGroup           String?  @db.VarChar(20)
+  Gender               String   @db.VarChar(10)
+  Occupation           String?  @db.VarChar(100)
+  Address              String?  @db.VarChar(250)
+  HospitalID           Int
+  State                String?  @db.VarChar(50)
+  City                 String?  @db.VarChar(50)
+  PinCode              String?  @db.VarChar(10)
+  MobileNo             String   @db.VarChar(20)
+  ReferredBy           String?  @db.VarChar(250)
+  Description          String?  @db.VarChar(250)
+  UserID               Int
+  Created              DateTime @db.DateTime(0)
+  Modified             DateTime @db.DateTime(0)
+  EmergencyContactNo   String?  @db.VarChar(20)
+}
+
+model mst_receipt {
+  ReceiptID            Int       @id @default(autoincrement())
+  ReceiptNo            String?   @db.VarChar(250)
+  ReceiptDate          DateTime  @db.DateTime(0)
+  OPDID                Int
+  AmountPaid           Decimal   @db.Decimal(10, 2)
+  Description          String?   @db.VarChar(250)
+  UserID               Int
+  Created              DateTime  @db.DateTime(0)
+  Modified             DateTime  @db.DateTime(0)
+  PaymentModeID        Int
+  ReferenceNo          String?   @db.VarChar(250)
+  ReferenceDate        DateTime? @db.DateTime(0)
+  cancellationDateTime DateTime? @db.DateTime(0)
+  CancellationByUserID Int?
+  CancellationRemarks  String?   @db.VarChar(500)
+}
+
+model mst_sub_treatment_type {
+  SubTreatmentTypeID   Int      @id @default(autoincrement())
+  SubTreatmentTypeName String   @db.VarChar(250)
+  TreatmentTypeID      Int
+  Rate                 Decimal  @db.Decimal(10, 2)
+  IsActive             Boolean  @db.Bit(1)
+  Description          String?  @db.VarChar(250)
+  UserID               Int
+  Created              DateTime @db.DateTime(0)
+  Modified             DateTime @db.DateTime(0)
+  AccountID            Int?
+}
+
+model mst_treatment_type {
+  TreatmentTypeID        Int      @id @default(autoincrement())
+  TreatmentTypeName      String   @db.VarChar(250)
+  TreatmentTypeShortName String?  @db.VarChar(50)
+  HospitalID             Int
+  Description            String?  @db.VarChar(250)
+  UserID                 Int
+  Created                DateTime @db.DateTime(0)
+  Modified               DateTime @db.DateTime(0)
+}
+
+model mst_user {
+  id         Int      @id @default(autoincrement())
+  name       String?  @db.VarChar(100)
+  email      String?  @unique(map: "email") @db.VarChar(100)
+  password   String?  @db.VarChar(255)
+  created_at DateTime @default(now()) @db.Timestamp(0)
+}
