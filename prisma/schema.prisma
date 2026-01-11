@@ -22,8 +22,6 @@ model mst_diagnosis_type {
 model mst_doctor {
   DoctorID    Int      @id @default(autoincrement())
   DoctorName  String   @db.VarChar(250)
-  StaffID     Int?
-  StudentID   Int?
   HospitalID  Int
   Description String?  @db.VarChar(250)
   UserID      Int
@@ -98,24 +96,6 @@ model mst_patient {
   EmergencyContactNo   String?  @db.VarChar(20)
 }
 
-model mst_receipt {
-  ReceiptID            Int       @id @default(autoincrement())
-  ReceiptNo            String?   @db.VarChar(250)
-  ReceiptDate          DateTime  @db.DateTime(0)
-  OPDID                Int
-  AmountPaid           Decimal   @db.Decimal(10, 2)
-  Description          String?   @db.VarChar(250)
-  UserID               Int
-  Created              DateTime  @db.DateTime(0)
-  Modified             DateTime  @db.DateTime(0)
-  PaymentModeID        Int
-  ReferenceNo          String?   @db.VarChar(250)
-  ReferenceDate        DateTime? @db.DateTime(0)
-  cancellationDateTime DateTime? @db.DateTime(0)
-  CancellationByUserID Int?
-  CancellationRemarks  String?   @db.VarChar(500)
-}
-
 model mst_sub_treatment_type {
   SubTreatmentTypeID   Int      @id @default(autoincrement())
   SubTreatmentTypeName String   @db.VarChar(250)
@@ -146,4 +126,38 @@ model mst_user {
   email      String?  @unique(map: "email") @db.VarChar(100)
   password   String?  @db.VarChar(255)
   created_at DateTime @default(now()) @db.Timestamp(0)
+}
+
+model mst_receipts {
+  ReceiptID            Int       @id @default(autoincrement())
+  ReceiptNo            String?   @db.VarChar(250)
+  ReceiptDate          DateTime  @db.DateTime(0)
+  OPDID                Int
+  AmountPaid           Decimal   @db.Decimal(10, 2)
+  Description          String?   @db.VarChar(250)
+  UserID               Int
+  Created              DateTime  @db.DateTime(0)
+  Modified             DateTime  @db.DateTime(0)
+  PaymentMode          String    @db.VarChar(20)
+  ReferenceNo          String?   @db.VarChar(250)
+  ReferenceDate        DateTime? @db.DateTime(0)
+  CancellationDateTime DateTime? @db.DateTime(0)
+  CancellationRemarks  String?   @db.VarChar(500)
+}
+
+model mst_receipt {
+  ReceiptID            Int       @id @default(autoincrement())
+  ReceiptNo            String?   @db.VarChar(250)
+  ReceiptDate          DateTime  @db.DateTime(0)
+  OPDID                Int
+  AmountPaid           Decimal   @db.Decimal(10, 2)
+  Description          String?   @db.VarChar(250)
+  UserID               Int
+  Created              DateTime  @default(now()) @db.DateTime(0)
+  Modified             DateTime  @default(now()) @db.DateTime(0)
+  PaymentMode          String    @db.VarChar(20)
+  ReferenceNo          String?   @db.VarChar(250)
+  ReferenceDate        DateTime? @db.DateTime(0)
+  CancellationDateTime DateTime? @db.DateTime(0)
+  CancellationRemarks  String?   @db.VarChar(500)
 }

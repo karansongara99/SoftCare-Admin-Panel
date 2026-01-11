@@ -14,3 +14,11 @@ export function generateToken(user: any) {
     { expiresIn: "1d" }
   );
 }
+
+export function verifyToken(token: string) {
+  try {
+    return jwt.verify(token, SECRET);
+  } catch (error) {
+    return null;
+  }
+}
